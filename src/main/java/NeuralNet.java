@@ -124,7 +124,7 @@ public class NeuralNet {
 
     public static void main(String[] args){
 
-        NeuralNet neuralNet=new NeuralNet(2,10,1);
+        NeuralNet neuralNet=new NeuralNet(784,10,1);
 
         for (int c = 0; c < 100000; c++) {
           int i = Math.random() > 0.5 ? 1 : 0;
