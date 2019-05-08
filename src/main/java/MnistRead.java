@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 public class MnistRead {
 
@@ -108,32 +109,38 @@ public class MnistRead {
         double[][] images = getImages(TRAIN_IMAGES_FILE);
         double[] labels = getLabels(TRAIN_LABELS_FILE);
 
+        double[][] imagesTest = getImages(TEST_IMAGES_FILE);
+        double[] labelsTest = getLabels(TEST_LABELS_FILE);
 
 //        System.out.println(images.length);
 //        System.out.println(images[0].length);
 //        System.out.println(labels.length);
 //        System.out.println(Arrays.toString(images));
         NeuralNet neuralNet=new NeuralNet(784,30,10);
-        for(int i=0;i<images.length;i++){
-            int a=(int)labels[i];
-            double[] outputLayerExpect = new double[]{0,0,0,0,0,0,0,0,0,0};
-            outputLayerExpect[a]=1;
-            neuralNet.forward(images[i], outputLayerExpect);
-            neuralNet.backPropagation();
-        }
-        double[][] imagesTest = getImages(TEST_IMAGES_FILE);
-        double[] labelsTest = getLabels(TEST_LABELS_FILE);
+        for(int k=0;k<100;k++){
 
-        int count=0;
-        for(int i=0;i<imagesTest.length;i++){
-            int a=(int)labelsTest[i];
-            double[] outputLayerExpect = new double[]{0,0,0,0,0,0,0,0,0,0};
-            //outputLayerExpect[a]=1;
-            neuralNet.forward(imagesTest[i], outputLayerExpect);
-           if(neuralNet.outputLayerA[a]>0.5){
-               count++;
-           }
+            for(int i=0;i<images.length;i++){
+                Random ran=new Random();
+                int j=ran.nextInt(images.length);
+                int a=(int)labels[j];
+                double[] outputLayerExpect = new double[]{0,0,0,0,0,0,0,0,0,0};
+                outputLayerExpect[a]=1;
+                neuralNet.forward(images[j], outputLayerExpect);
+                neuralNet.backPropagation();
+            }
+
+            int count=0;
+            for(int i=0;i<imagesTest.length;i++){
+                int a=(int)labelsTest[i];
+                double[] outputLayerExpect = new double[]{0,0,0,0,0,0,0,0,0,0};
+                //outputLayerExpect[a]=1;
+                neuralNet.forward(imagesTest[i], outputLayerExpect);
+               if(neuralNet.outputLayerA[a]>0.5){
+                   count++;
+                   System.out.println(Arrays.toString(neuralNet.outputLayerA)+"/"+a);
+               }
+            }
+            System.out.println("共"+imagesTest.length+"测试数据/成功"+count+"数据");
         }
-        System.out.println("共"+imagesTest.length+"测试数据/成功"+count+"数据");
     }
 }
