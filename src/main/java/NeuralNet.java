@@ -22,7 +22,7 @@ public class NeuralNet {
 
 
 
-    double edu=3;//学习速率
+    double edu=50;//学习速率
 
 
     //初始化
@@ -64,7 +64,7 @@ public class NeuralNet {
     public static double sigmod(double z){
        return 1d /(1d+ Math.pow(Math.E,-z));
     }
-    public  void forward(double[] inputLayer,double[] outputLayerExpect){
+    public  double[] forward(double[] inputLayer,double[] outputLayerExpect){
         this.inputLayer=inputLayer;
         this.outputLayerExpect=outputLayerExpect;
         for(int i=0; i<hiddenLayerZ.length;i++){
@@ -82,18 +82,21 @@ public class NeuralNet {
             }
             outputLayerZ[i]=outputLayerZ[i]+outputLayerB[i];
             outputLayerA[i]=sigmod(outputLayerZ[i]);
+            outputLayerErr[i]=(outputLayerA[i]-outputLayerExpect[i])*sigmod_prime(outputLayerZ[i]);
             //outputLayerErr[i]=Math.pow(outputLayerExpect[i]-outputLayerA[i],2);
         }
+        return outputLayerErr;
 
     };
     public double sigmod_prime(double z){
         return  sigmod(z)*(1-sigmod(z));
     }
 
-    public void backPropagation(){
-        for(int i=0;i<outputLayerErr.length;i++){
+    public void backPropagation(double[] outputLayerErr){
+        this.outputLayerErr=outputLayerErr;
+        /*for(int i=0;i<outputLayerErr.length;i++){
             outputLayerErr[i]=(outputLayerA[i]-outputLayerExpect[i])*sigmod_prime(outputLayerZ[i]);
-        }
+        }*/
         for(int i=0;i<hiddenLayerErr.length;i++){
             double sum=0;
             for(int j=0;j<outputLayerErr.length;j++){
@@ -122,7 +125,7 @@ public class NeuralNet {
 
     }
 
-    public static void main(String[] args){
+    /*public static void main(String[] args){
 
         NeuralNet neuralNet=new NeuralNet(784,10,1);
 
@@ -171,6 +174,6 @@ public class NeuralNet {
       neuralNet.forward(inputLayer, outputLayerExpect);
         System.out.println("输出为"+Arrays.toString(neuralNet.outputLayerA)+"/期望为"+(i==j));
         }
-    }
+    }*/
 
 }
