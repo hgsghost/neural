@@ -95,7 +95,7 @@ public class MnistRead {
         return y;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         File directory = new File("");//设定为当前文件夹
 
@@ -142,5 +142,5 @@ public class MnistRead {
             }
             System.out.println("共"+imagesTest.length+"测试数据/成功"+count+"数据");
         }
-    }
+    }*/
 }
